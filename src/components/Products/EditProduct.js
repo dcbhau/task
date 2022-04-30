@@ -6,8 +6,8 @@ import {  useNavigate, useParams } from "react-router-dom";
 const EditProduct = () => 
 {
     const dispatch = useDispatch();
-   const navigate = useNavigate();
-   const product = useSelector(status => status.allProducts.singleProduct)
+    const navigate = useNavigate();
+    const product = useSelector(status => status.allProducts.singleProduct)
     const location = useParams();
     const [formData,setFormData] = useState({
         p_name:"",
@@ -22,9 +22,7 @@ const EditProduct = () =>
         payload.id = location.id
         e.preventDefault();
         dispatch(updateProduct(payload));
-        setTimeout(() => {
-            navigate("/")
-        }, 1000);
+        navigate("/")
 
     }
     const changed = (e) => 

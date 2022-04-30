@@ -2,6 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteProductById } from '../../../store/action';
+import DataTable from 'react-data-table-component';
+import { AiFillEdit,AiFillDelete } from "react-icons/ai";
 
 const Product = () => {
     
@@ -11,36 +13,55 @@ const Product = () => {
     {
         dispatch(deleteProductById(id));
     }
-    const renderList = products.map((product) => (
-            <div className="col-4" key={product.id}>
-                
-                        <div className="card">
-                            <div className="card-body">
-                                    <h5 className="card-title">{product.p_name}</h5>
-                                    <p className='card-text'>Price: ${product.p_price}</p>
-                                    <p className="card-text">{product.p_category}</p>
-                            </div>
-                            <div className='card-footer'>
-                                <Link to={'/edit-product/' + product.id }><button className='btn btn-secondary'>Update</button></Link>
-                                <button onClick={() => deleteProduct(product.id)} className='btn btn-danger ml-3'>Delete</button>
-                            </div>
-
-                        </div>
-        
-            </div>
-    ))
-    const addProduct = (
-        <div className='container'>
-            {products.length === 0 ? (<h4>No products available</h4>) : null}
-            <Link to="/add-product"><button className='btn btn-primary'>Add Product</button></Link>
-        </div>
-    )
+    const columns = [ 
+        {
+            name:'Id',
+            selector:row => row.id,
+            sortable: true,
+            reorder:true
+        },
+        {
+            name: 'Product Name',
+            selector: row => row.p_name,
+            sortable: true,
+            reorder:true
+        },
+        {
+            name: 'Product Price',
+            selector: row => row.p_price + ' $',
+            sortable: true,
+            reorder:true
+        },
+        {
+            name: 'Product Category',
+            selector: row => row.p_category,
+            sortable: true,
+            reorder:true
+        },
+        {
+            name: 'Product Description',
+            selector: row => row.p_description,
+            sortable: false,
+            maxWidth:'200px',
+            reorder:true
+        },
+        {
+            name:'Actions',
+            cell:(row) => (
+                <>
+                    <Link to={'/edit-product/' + row.id }><button className="button-action secondary"><AiFillEdit/></button></Link>
+                    <button className="button-action danger" onClick={() => deleteProduct(row.id)}><AiFillDelete/></button>
+                </>)
+            
+        }
+    ]
   return (
     <>
-        {renderList}
-        {addProduct}
+        <Link className="ml-auto" to="/add-product"><button className='btn btn-primary'>Add Product</button></Link>
+        <DataTable columns={columns} data={products} striped pagination reorder />
     </>
   )
 }
 
 export default Product;
+
